@@ -17,17 +17,16 @@ const Wrapper = styled.div`
 
 const LogoWrapper = styled.div`
     display: flex;
-    justify-content: center;
-    padding: 1.5rem 0;
+    padding: 1.5rem;
 `;
 
 const Logo = styled.div`
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     color: ${Colors.TextPrimary};
     border-radius: 50%;
     border: 5px solid ${Colors.TextPrimary};
-    font-size: 50px;
+    font-size: 40px;
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -44,11 +43,6 @@ const Menu = styled.div`
 `;
 
 const MenuItem = styled.div`
-    .submenu {
-        display: none;
-        padding-left: 3.2rem;
-    }
-
     &.active > .submenu {
         display: block;
     }
@@ -60,6 +54,15 @@ const MenuItem = styled.div`
         &:hover,
         &.active {
             background-color: ${Colors.Gray2};
+        }
+    }
+    .submenu {
+        display: none;
+        padding-left: 3.2rem;
+        .menu-item {
+            a {
+                background-color: transparent;
+            }
         }
     }
 
@@ -115,7 +118,7 @@ const Sidebar: React.FunctionComponent<ISidebarProps> = () => {
                 {item.children && (
                     <div className="submenu">
                         {item.children.map((child, index) =>
-                            renderMenuItem(child, index, "children")
+                            renderMenuItem(child, index, "menu-item")
                         )}
                     </div>
                 )}

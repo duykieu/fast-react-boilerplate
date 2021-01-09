@@ -17,6 +17,11 @@ export interface IUserLoginSuccessPayload {
     user: IUser;
 }
 
+export type LoginFormDataType = {
+    username: string;
+    password: string;
+};
+
 export default class User extends Model {
     static async login<T>(payload: {
         username: string;

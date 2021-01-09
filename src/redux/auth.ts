@@ -20,9 +20,8 @@ const initialState: IAuthState = {
     params: {}
 };
 
-const AUTH_REQUESTED = "AUTH_REQUESTED";
-const AUTH_REQUEST_SUCCESS = "AUTH_REQUEST_SUCCESS";
-const AUTH_REQUEST_FAILED = "AUTH_REQUEST_FAILED";
+const AUTH_SET_LOADING = "AUTH_SET_LOADING";
+export const AUTH_SET_USER = "AUTH_SET_USER";
 export const AUTH_LOGOUT_USER = "AUTH_LOGOUT_USER";
 const AUTH_SET_ERROR = "AUTH_SET_ERROR";
 
@@ -31,27 +30,21 @@ export default (
     action: { type: string; payload: any }
 ): IAuthState => {
     switch (action.type) {
-        case AUTH_REQUESTED:
+        case AUTH_SET_LOADING:
             return {
                 ...state,
                 loading: true
             };
-        case AUTH_REQUEST_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                ...action.payload
-            };
-        case AUTH_REQUEST_FAILED:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
+
         case AUTH_SET_ERROR:
             return {
                 ...state,
                 error: action.payload
+            };
+        case AUTH_SET_USER:
+            return {
+                ...state,
+                ...action.payload
             };
         case AUTH_LOGOUT_USER:
             return initialState;
@@ -60,32 +53,31 @@ export default (
     }
 };
 
-class AuthActionCreators extends CoreAction<typeof User> {
+class AuthActionCreators extends CoreAction<typeof User, IUser> {
     constructor() {
         super({
             model: User,
-            requestedAction: AUTH_REQUESTED,
-            successAction: AUTH_REQUEST_SUCCESS,
-            failedAction: AUTH_REQUEST_FAILED,
+            loadingAction: AUTH_SET_LOADING,
             errorAction: AUTH_SET_ERROR
         });
+    }
+
+    setUser(payload) {
+        return {
+            type: AUTH_SET_USER,
+            payload
+        };
     }
 
     login(payload: {
         username: string;
         password: string;
     }): ThunkAction<void, RootStateType, unknown, Action<string>> {
-        return (dispatch: ThunkDispatch) => {
-            return User.login<IUserLoginSuccessPayload>(payload)
-                .then(data => {
-                    dispatch(
-                        this.requestSuccess<IUserLoginSuccessPayload>(data)
-                    );
-                })
-                .catch(e => {
-                    dispatch(this.setError(e));
-                });
-        };
+        return this.run((dispatch: ThunkDispatch) => {
+            return User.login<IUserLoginSuccessPayload>(payload).then(data => {
+                dispatch(this.setUser(data));
+            });
+        });
     }
 }
 

@@ -1,11 +1,10 @@
 import { Action, AnyAction, combineReducers } from "redux";
 
 import auth from "./auth";
-import posts from "./post";
 import global from "./global";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 
-const rootReducer = combineReducers({ global, auth, posts });
+const rootReducer = combineReducers({ global, auth });
 
 export type RootStateType = ReturnType<typeof rootReducer>;
 
