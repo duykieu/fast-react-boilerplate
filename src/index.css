@@ -1,0 +1,15 @@
+html {
+  font-size: 62.5%;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 1.5rem;
+font-family: 'Andika New Basic', sans-serif !important;
+
+}
